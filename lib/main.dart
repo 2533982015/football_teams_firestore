@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Football Teams',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.red),
       home: HomePage());
 }
 
@@ -42,20 +42,24 @@ class _HomePageState extends State<HomePage> {
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
             return ListView.builder(
-              itemCount: streamSnapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                final DocumentSnapshot documentSnapshot =
-                    streamSnapshot.data!.docs[index];
-                return Card(
-                  margin: const EdgeInsets.all(10),
-                  child: ListTile(
-                    title: Text(documentSnapshot['nombre']),
-                    subtitle: Text(documentSnapshot['entrenador'].toString()),
-                  ),
-                );
-              },
-            );
+                itemCount: streamSnapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final DocumentSnapshot documentSnapshot =
+                      streamSnapshot.data!.docs[index];
+                  return Card(
+                      margin: const EdgeInsets.all(10),
+                      child: Container(
+                        child: ListTile(
+                          leading: Image.network(documentSnapshot['foto']),
+                          title: Text(documentSnapshot['nombre']),
+                          subtitle: Text('${documentSnapshot['entrenador']}'),
+                          trailing: Text(
+                              'Estadio: ${documentSnapshot['estadio']['nombre']}'),
+                        ),
+                      ));
+                });
           }
+          
           return const Center(child: CircularProgressIndicator());
         },
       ),
